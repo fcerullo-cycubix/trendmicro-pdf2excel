@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+instance/
+.env
+uploads/
+outputs/
+*.xlsx
+*.pdf
+*.log
+venv/

@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "templates"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {"window.title": "Trend Micro PDF2Excel"}
+}
