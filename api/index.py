@@ -58,14 +58,14 @@ def upload_single_pdf():
     <h2 class="text-xl font-semibold mb-2">Convert Single Report</h2>
     <form method="post" enctype="multipart/form-data" action="/" id="single-form" class="mb-8 space-y-4">
       <label for="file-upload" class="block border-2 border-dashed border-gray-300 p-4 rounded-md text-center hover:border-blue-500 transition cursor-pointer">
-        <p class="text-gray-600">Click or drag a Trend Micro PDF report</p>
+        <p id="single-file-text" class="text-gray-600">Click or drag a Trend Micro PDF report</p>
         <input type="file" name="file" id="file-upload" class="hidden" accept=".pdf">
       </label>
-      <div id="single-progress" class="hidden">
-        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-          <div id="single-progress-bar" class="bg-blue-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div>
+      <div id="single-progress" class="hidden mb-4">
+        <div class="w-full bg-gray-200 rounded-full h-4 mb-2 shadow-inner">
+          <div id="single-progress-bar" class="bg-blue-600 h-4 rounded-full progress-bar shadow-sm" style="width: 0%"></div>
         </div>
-        <p id="single-progress-text" class="text-sm text-gray-600 text-center">Uploading...</p>
+        <p id="single-progress-text" class="text-sm text-gray-600 text-center font-medium">Uploading...</p>
       </div>
       <button type="submit" id="single-submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
         Convert Report to Excel
@@ -75,14 +75,14 @@ def upload_single_pdf():
     <h2 class="text-xl font-semibold mb-2">Convert & Combine Multiple Reports</h2>
     <form method="post" enctype="multipart/form-data" action="/combine-pdfs" id="multi-form" class="space-y-4">
       <label for="multi-upload" class="block border-2 border-dashed border-gray-300 p-4 rounded-md text-center hover:border-yellow-500 transition cursor-pointer">
-        <p class="text-gray-600">Click or drag multiple Trend Micro PDF reports</p>
+        <p id="multi-file-text" class="text-gray-600">Click or drag multiple Trend Micro PDF reports</p>
         <input type="file" name="files" id="multi-upload" class="hidden" accept=".pdf" multiple>
       </label>
-      <div id="multi-progress" class="hidden">
-        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-          <div id="multi-progress-bar" class="bg-yellow-500 h-2.5 rounded-full progress-bar" style="width: 0%"></div>
+      <div id="multi-progress" class="hidden mb-4">
+        <div class="w-full bg-gray-200 rounded-full h-4 mb-2 shadow-inner">
+          <div id="multi-progress-bar" class="bg-yellow-500 h-4 rounded-full progress-bar shadow-sm" style="width: 0%"></div>
         </div>
-        <p id="multi-progress-text" class="text-sm text-gray-600 text-center">Uploading...</p>
+        <p id="multi-progress-text" class="text-sm text-gray-600 text-center font-medium">Uploading...</p>
       </div>
       <button type="submit" id="multi-submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded w-full">
         Combine Reports into Excel
@@ -156,6 +156,23 @@ def upload_single_pdf():
     // Setup both forms
     setupFormProgress('single-form', 'single-progress', 'single-progress-bar', 'single-progress-text', 'single-submit');
     setupFormProgress('multi-form', 'multi-progress', 'multi-progress-bar', 'multi-progress-text', 'multi-submit');
+    
+    // Show file selection feedback
+    document.getElementById('file-upload').addEventListener('change', function(e) {
+      const fileText = document.getElementById('single-file-text');
+      if (e.target.files.length > 0) {
+        fileText.textContent = `Selected: ${e.target.files[0].name}`;
+        fileText.classList.add('text-blue-600', 'font-semibold');
+      }
+    });
+    
+    document.getElementById('multi-upload').addEventListener('change', function(e) {
+      const fileText = document.getElementById('multi-file-text');
+      if (e.target.files.length > 0) {
+        fileText.textContent = `Selected: ${e.target.files.length} file(s)`;
+        fileText.classList.add('text-yellow-600', 'font-semibold');
+      }
+    });
   </script>
 </body>
 </html>'''
