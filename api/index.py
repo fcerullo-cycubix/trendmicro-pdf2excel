@@ -136,6 +136,5 @@ def static_files(filename):
         return send_file(static_path)
     return '', 404
 
-# Vercel serverless function handler
-def handler(request):
-    return app(request.environ, lambda status, headers: None)
+# Vercel expects 'app' to be available at module level
+# The Flask app is already defined above as 'app'
