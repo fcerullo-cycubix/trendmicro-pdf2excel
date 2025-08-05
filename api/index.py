@@ -40,6 +40,16 @@ def upload_single_pdf():
   <meta charset="UTF-8">
   <title>Trend Micro Report to Excel Converter</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  
   <style>
     .progress-bar { transition: width 0.3s ease; }
     .hidden { display: none; }
@@ -124,6 +134,14 @@ def upload_single_pdf():
             progressBar.style.width = '100%';
             progressText.textContent = 'Processing complete!';
             
+            // Track successful conversion
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'conversion_success', {
+                event_category: 'file_processing',
+                event_label: formId === 'single-form' ? 'single_pdf' : 'multiple_pdf'
+              });
+            }
+            
             // Create download link
             const blob = new Blob([xhr.response], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
             const url = window.URL.createObjectURL(blob);
@@ -132,9 +150,25 @@ def upload_single_pdf():
             a.download = xhr.getResponseHeader('Content-Disposition')?.split('filename=')[1] || 'report.xlsx';
             a.click();
             window.URL.revokeObjectURL(url);
+            
+            // Track download
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'file_download', {
+                event_category: 'engagement',
+                event_label: 'excel_file'
+              });
+            }
           } else {
             progressText.textContent = 'Upload failed!';
             progressBar.classList.add('bg-red-500');
+            
+            // Track failed conversion
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'conversion_failed', {
+                event_category: 'file_processing',
+                event_label: formId === 'single-form' ? 'single_pdf' : 'multiple_pdf'
+              });
+            }
           }
           
           // Reset form
@@ -163,6 +197,14 @@ def upload_single_pdf():
       if (e.target.files.length > 0) {
         fileText.textContent = `Selected: ${e.target.files[0].name}`;
         fileText.classList.add('text-blue-600', 'font-semibold');
+        
+        // Track file selection
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'file_selected', {
+            event_category: 'user_interaction',
+            event_label: 'single_pdf'
+          });
+        }
       }
     });
     
@@ -171,6 +213,15 @@ def upload_single_pdf():
       if (e.target.files.length > 0) {
         fileText.textContent = `Selected: ${e.target.files.length} file(s)`;
         fileText.classList.add('text-yellow-600', 'font-semibold');
+        
+        // Track file selection
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'file_selected', {
+            event_category: 'user_interaction',
+            event_label: 'multiple_pdf',
+            value: e.target.files.length
+          });
+        }
       }
     });
   </script>
